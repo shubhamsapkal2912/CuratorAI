@@ -1,0 +1,637 @@
+/* ─────────────────────────────────────────────────────────────
+   GOOGLE FONTS
+   ───────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* ─────────────────────────────────────────────────────────────
+   DESIGN TOKENS (mapped 1-to-1 from original Tailwind config)
+   ───────────────────────────────────────────────────────────── */
+:host {
+  /* Primary */
+  --primary:                  #0059ba;
+  --primary-container:        #1871e3;
+  --primary-fixed:            #d7e2ff;
+  --primary-fixed-dim:        #acc7ff;
+  --on-primary:               #ffffff;
+  --on-primary-fixed:         #001a40;
+  --on-primary-container:     #fefcff;
+  --inverse-primary:          #acc7ff;
+
+  /* Secondary */
+  --secondary:                #405e96;
+  --secondary-container:      #a4c1ff;
+  --secondary-fixed:          #d8e2ff;
+  --secondary-fixed-dim:      #adc7ff;
+  --on-secondary:             #ffffff;
+  --on-secondary-container:   #2f4e85;
+  --on-secondary-fixed:       #001a41;
+  --on-secondary-fixed-variant: #26467c;
+
+  /* Tertiary */
+  --tertiary:                 #9e3d00;
+  --tertiary-container:       #c64f00;
+  --tertiary-fixed:           #ffdbcc;
+  --tertiary-fixed-dim:       #ffb695;
+  --on-tertiary:              #ffffff;
+  --on-tertiary-container:    #fffbff;
+  --on-tertiary-fixed:        #351000;
+  --on-tertiary-fixed-variant: #7c2e00;
+
+  /* Surface */
+  --surface:                  #f7f9fb;
+  --surface-dim:              #d8dadc;
+  --surface-bright:           #f7f9fb;
+  --surface-tint:             #005bbf;
+  --surface-variant:          #e0e3e5;
+  --surface-container:        #eceef0;
+  --surface-container-low:    #f2f4f6;
+  --surface-container-high:   #e6e8ea;
+  --surface-container-highest: #e0e3e5;
+  --surface-container-lowest: #ffffff;
+
+  /* On-Surface */
+  --on-surface:               #191c1e;
+  --on-surface-variant:       #414754;
+  --inverse-surface:          #2d3133;
+  --inverse-on-surface:       #eff1f3;
+
+  /* Outline */
+  --outline:                  #717786;
+  --outline-variant:          #c1c6d7;
+
+  /* Error */
+  --error:                    #ba1a1a;
+  --error-container:          #ffdad6;
+  --on-error:                 #ffffff;
+  --on-error-container:       #93000a;
+
+  /* Typography */
+  --font-headline:            'Manrope', sans-serif;
+  --font-body:                'Inter', sans-serif;
+
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PAGE WRAPPER
+   ───────────────────────────────────────────────────────────── */
+.page-wrapper {
+  font-family: var(--font-body);
+  color: var(--on-surface);
+  background-color: var(--surface);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ATMOSPHERIC BACKGROUND BLOBS
+   ───────────────────────────────────────────────────────────── */
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+}
+
+.blob-primary {
+  top: -10%;
+  left: -10%;
+  width: 40%;
+  height: 40%;
+  background: var(--primary-fixed);
+  opacity: 0.4;
+}
+
+.blob-secondary {
+  bottom: -10%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: var(--secondary-fixed);
+  opacity: 0.3;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MAIN CANVAS
+   ───────────────────────────────────────────────────────────── */
+.main-canvas {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+}
+
+@media (min-width: 768px) {
+  .main-canvas {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BRANDING PANEL (left side)
+   ───────────────────────────────────────────────────────────── */
+.branding-panel {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 28rem;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .branding-panel {
+    display: flex;
+  }
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-orb {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.125rem;
+}
+
+.brand-name {
+  font-family: var(--font-headline);
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  color: var(--primary);
+}
+
+.brand-headline {
+  font-family: var(--font-headline);
+  font-size: clamp(2.25rem, 3.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--on-surface);
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.headline-accent {
+  color: var(--primary);
+}
+
+.brand-tagline {
+  color: var(--on-surface-variant);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.trust-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.trust-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+}
+
+/* PrimeNG AvatarGroup override */
+::ng-deep .trust-avatar.p-avatar {
+  border: 2px solid #fff !important;
+  margin-left: -0.625rem !important;
+}
+
+::ng-deep .p-avatargroup .trust-avatar.p-avatar:first-child {
+  margin-left: 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CARD COLUMN (right side)
+   ───────────────────────────────────────────────────────────── */
+.card-column {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GLASS CARD
+   ───────────────────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CARD HEADER
+   ───────────────────────────────────────────────────────────── */
+.card-title {
+  font-family: var(--font-headline);
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0 0 0.5rem;
+}
+
+.card-subtitle {
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LOGIN FORM
+   ───────────────────────────────────────────────────────────── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--outline);
+  margin-left: 0.25rem;
+}
+
+.field-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 0.25rem;
+}
+
+.forgot-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: var(--primary-container);
+}
+
+/* ─── Input Shell ─── */
+.input-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--outline);
+  font-size: 1rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pill-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem !important;
+  background: var(--surface-container-low) !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  color: var(--on-surface) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9375rem !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.pill-input::placeholder {
+  color: rgba(113, 119, 134, 0.6);
+}
+
+.pill-input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 89, 186, 0.15) !important;
+}
+
+/* Extra right padding for the visibility toggle button */
+.pill-input--password {
+  padding-right: 3rem !important;
+}
+
+/* PrimeNG InputText overrides */
+::ng-deep .pill-input.p-inputtext {
+  border: none !important;
+  border-radius: 9999px !important;
+}
+
+::ng-deep .pill-input.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 3px rgba(0, 89, 186, 0.15) !important;
+  border-color: transparent !important;
+}
+
+.visibility-btn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--outline);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  z-index: 2;
+}
+
+.visibility-btn:hover {
+  color: var(--on-surface);
+}
+
+/* ─── Remember Row ─── */
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+.remember-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* PrimeNG Checkbox overrides */
+::ng-deep .p-checkbox .p-checkbox-box {
+  border-radius: 0.25rem !important;
+  border-color: var(--outline-variant) !important;
+  background: var(--surface-container) !important;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+  border-color: var(--primary) !important;
+}
+
+::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+  box-shadow: 0 0 0 3px rgba(0, 89, 186, 0.15) !important;
+  border-color: var(--primary) !important;
+}
+
+/* ─── Sign In Button ─── */
+.sign-in-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+  color: #fff;
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 24px rgba(0, 89, 186, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sign-in-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 89, 186, 0.3);
+}
+
+.sign-in-btn:active {
+  transform: scale(0.96);
+}
+
+.btn-arrow {
+  transition: transform 0.2s ease;
+}
+
+.sign-in-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   OR DIVIDER
+   ───────────────────────────────────────────────────────────── */
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(193, 198, 215, 0.3);
+}
+
+.divider-label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--outline);
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SOCIAL LOGIN GRID
+   ───────────────────────────────────────────────────────────── */
+.social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  background: var(--surface-container-lowest);
+  border: 1px solid rgba(193, 198, 215, 0.22);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  transition: background 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-btn:hover {
+  background: var(--surface-container);
+  border-color: rgba(193, 198, 215, 0.5);
+}
+
+.social-icon-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.social-icon-pi {
+  font-size: 1.2rem;
+  color: var(--on-surface);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CARD FOOTER
+   ───────────────────────────────────────────────────────────── */
+.card-footer {
+  text-align: center;
+}
+
+.card-footer p {
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+  font-weight: 500;
+  margin: 0;
+}
+
+.register-link {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 0.25rem;
+  transition: text-decoration 0.2s ease;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BOTTOM MICRO-LINKS
+   ───────────────────────────────────────────────────────────── */
+.bottom-links {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.bottom-links a {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--outline);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.bottom-links a:hover {
+  color: var(--primary);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SYSTEM STATUS BADGE
+   ───────────────────────────────────────────────────────────── */
+.status-badge {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+}
+
+@media (min-width: 1280px) {
+  .status-badge {
+    display: flex;
+  }
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--tertiary);
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.85); }
+}
+
+.status-text {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--on-tertiary-fixed-variant);
+  white-space: nowrap;
+}

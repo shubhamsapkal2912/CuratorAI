@@ -1,0 +1,649 @@
+/* ── Page Layout ── */
+.doc-page {
+  padding: 6rem 2.5rem 4rem;
+  max-width: calc(100% - 15%);
+  margin-left: 15%;
+}
+
+/* ── Controls Row ── */
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.stats-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-color);
+  margin-bottom: 0.3rem;
+}
+
+.stats-sub {
+  font-size: 0.82rem;
+  color: var(--text-color-secondary);
+}
+
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ── View Toggle ── */
+.view-toggle {
+  display: flex;
+  background-color: var(--surface-ground);
+  border-radius: 99px;
+  padding: 0.25rem;
+  gap: 0.2rem;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  border-radius: 99px;
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toggle-btn--active {
+  background-color: var(--surface-card);
+  color: var(--primary-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.toggle-btn i {
+  font-size: 0.85rem;
+}
+
+/* ── Upload Button Override ── */
+::ng-deep .upload-new-btn.p-button {
+  background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+  border: none;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.55rem 1.2rem;
+  box-shadow: 0 4px 14px rgba(0, 89, 186, 0.3);
+}
+
+/* ── Empty Search ── */
+.empty-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: var(--text-color-secondary);
+  gap: 0.75rem;
+}
+
+.empty-search-icon {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+
+.empty-search h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.empty-search p {
+  font-size: 0.85rem;
+}
+
+/* ════════════════════════════════════════
+   BENTO GRID
+   ════════════════════════════════════════ */
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* ── Base Card ── */
+.doc-card {
+  background-color: var(--surface-card);
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.2s ease;
+  cursor: default;
+}
+
+/* ── Featured Card ── */
+.doc-card--featured {
+  grid-column: span 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.doc-card--featured:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.featured-file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.featured-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.doc-card--featured:hover .featured-name {
+  color: var(--primary-color);
+}
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.meta-date {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  font-weight: 500;
+}
+
+.featured-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* ── Metadata Chips ── */
+.meta-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.meta-chip {
+  background-color: var(--surface-ground);
+  border-radius: 0.75rem;
+  padding: 0.9rem 1rem;
+}
+
+.chip-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-color-secondary);
+  margin-bottom: 0.3rem;
+}
+
+.chip-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+/* ── Featured Footer ── */
+.featured-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.collaborators {
+  display: flex;
+  align-items: center;
+}
+
+.collab-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: var(--surface-ground);
+  border: 2px solid var(--surface-card);
+  margin-left: -0.5rem;
+}
+
+.collab-avatar:first-child {
+  margin-left: 0;
+}
+
+.collab-more {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #d8e2ff;
+  border: 2px solid var(--surface-card);
+  margin-left: -0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #001a41;
+}
+
+.delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--red-500, #ef4444);
+  transition: background 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: color-mix(in srgb, var(--red-500, #ef4444) 10%, transparent);
+}
+
+/* ── Standard Card ── */
+.doc-card--standard {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-card--standard:hover {
+  background-color: var(--surface-0, #fff);
+  border-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Processing Card ── */
+.doc-card--processing {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: color-mix(in srgb, var(--primary-color) 4%, var(--surface-card));
+  border-color: color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+/* ── Shared Card Parts ── */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.card-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.card-meta {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  margin-bottom: 1rem;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.processing-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary-color);
+}
+
+.view-source-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.view-source-btn:hover {
+  opacity: 0.7;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.2rem;
+}
+
+/* ── File Icons ── */
+.file-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background-color: var(--surface-ground);
+  color: var(--text-color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.file-icon--featured {
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: color-mix(in srgb, var(--primary-color) 12%, white);
+  color: var(--primary-color);
+  font-size: 1.6rem;
+}
+
+.file-icon--processing {
+  background-color: color-mix(in srgb, var(--primary-color) 15%, white);
+  color: var(--primary-color);
+}
+
+.spin-icon {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Action Icon Buttons ── */
+.action-icon-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color-secondary);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.action-icon-btn:hover {
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+}
+
+.action-icon-btn--danger:hover {
+  background-color: color-mix(in srgb, var(--red-500, #ef4444) 10%, transparent);
+  color: var(--red-500, #ef4444);
+}
+
+.action-icon-btn i {
+  font-size: 0.9rem;
+}
+
+/* ── Status Tag Override ── */
+::ng-deep .status-tag.p-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+/* ── Progress Bar Overrides ── */
+::ng-deep .doc-progress .p-progressbar {
+  height: 4px;
+  border-radius: 99px;
+  background-color: var(--surface-border);
+  margin-bottom: 1rem;
+}
+
+::ng-deep .doc-progress .p-progressbar-value {
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--primary-color), #60a5fa);
+}
+
+/* ── Add New Card ── */
+.doc-card--add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background: transparent;
+  border: 2px dashed color-mix(in srgb, var(--text-color-secondary) 30%, transparent);
+  text-align: center;
+  cursor: pointer;
+  min-height: 200px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.doc-card--add:hover {
+  background-color: var(--surface-ground);
+  border-color: color-mix(in srgb, var(--primary-color) 50%, transparent);
+}
+
+.add-icon-ring {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--surface-ground);
+  color: var(--text-color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.doc-card--add:hover .add-icon-ring {
+  background-color: color-mix(in srgb, var(--primary-color) 12%, white);
+  color: var(--primary-color);
+}
+
+.add-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.35rem;
+}
+
+.add-sub {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════
+   LIST VIEW
+   ════════════════════════════════════════ */
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--surface-card);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list-item:hover {
+  border-color: color-mix(in srgb, var(--primary-color) 20%, transparent);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.list-file-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.6rem;
+  background-color: var(--surface-ground);
+  color: var(--text-color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.list-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-meta {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  margin-top: 0.15rem;
+}
+
+::ng-deep .list-progress .p-progressbar {
+  height: 4px;
+  width: 8rem;
+  border-radius: 99px;
+}
+
+.list-actions {
+  display: flex;
+  gap: 0.2rem;
+}
+
+/* ── Load More ── */
+.load-more-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+::ng-deep .load-more-btn.p-button {
+  padding: 0.75rem 2.5rem;
+  border-radius: 99px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+  border: none;
+}
+
+::ng-deep .load-more-btn.p-button:hover {
+  background-color: var(--surface-border);
+}
+
+/* ── Confirm Dialog Override ── */
+::ng-deep .confirm-dialog .p-confirmdialog-message {
+  font-size: 0.9rem;
+}
+
+/* ════════════════════════════════════════
+   FLOATING ACTION BUTTON
+   ════════════════════════════════════════ */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 8px 24px rgba(0, 89, 186, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 200;
+  animation: fabIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(0, 89, 186, 0.5);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fab-tooltip {
+  position: absolute;
+  right: calc(100% + 0.75rem);
+  background-color: #1e293b;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.fab:hover .fab-tooltip {
+  opacity: 1;
+}
+
+@keyframes fabIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}

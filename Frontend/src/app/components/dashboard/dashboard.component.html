@@ -1,0 +1,335 @@
+<p-toast position="top-right" />
+
+<app-sidebar
+  [activeMenu]="activeMenu"
+  (menuSelect)="onMenuSelect($event)">
+</app-sidebar>
+
+<app-top-bar
+  pageTitle="Digital Curator RAG"
+  [showSearch]="true">
+</app-top-bar>
+
+<div class="workspace">
+  <aside class="history-panel">
+    <div class="history-panel__header">
+      <div>
+        <p class="history-panel__eyebrow">Chat History</p>
+        <h3 class="history-panel__title">Saved conversations</h3>
+      </div>
+      <span class="history-panel__count">{{ conversationCount() }}</span>
+    </div>
+
+    <button
+      class="history-new-btn"
+      type="button"
+      [disabled]="isThinking()"
+      (click)="startNewConversation()">
+      <i class="pi pi-plus"></i>
+      <span>New chat</span>
+    </button>
+
+    @if (showDraftConversation()) {
+      <button
+        class="history-card history-card--draft"
+        type="button"
+        [class.history-card--active]="!currentConversationId()"
+        [disabled]="isThinking()"
+        (click)="startNewConversation()">
+        <span class="history-title">Current chat</span>
+        <span class="history-preview">Unsaved draft in progress</span>
+        <span class="history-meta">Active now</span>
+      </button>
+    }
+
+    @if (isLoadingHistory()) {
+      <div class="history-state">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Loading conversations...</span>
+      </div>
+    }
+
+    @if (!isLoadingHistory() && historyLoadError()) {
+      <div class="history-state history-state--error">
+        <i class="pi pi-exclamation-circle"></i>
+        <span>{{ historyLoadError() }}</span>
+      </div>
+    }
+
+    @if (!isLoadingHistory() && !historyLoadError() && !conversationCount() && !showDraftConversation()) {
+      <div class="history-state">
+        <i class="pi pi-comments"></i>
+        <span>Your past chats will appear here.</span>
+      </div>
+    }
+
+    @if (conversationCount()) {
+      <div class="history-list">
+        @for (conversation of conversations(); track conversation.id) {
+          <button
+            class="history-card"
+            type="button"
+            [class.history-card--active]="currentConversationId() === conversation.id"
+            [disabled]="isThinking() || isLoadingConversation()"
+            (click)="openConversation(conversation)">
+            <span class="history-title">{{ conversation.title }}</span>
+            <span class="history-preview">
+              {{ conversation.last_message_preview || 'Open conversation' }}
+            </span>
+            <span class="history-meta">
+              {{ conversation.updated_at | date:'MMM d, h:mm a' }}
+            </span>
+          </button>
+        }
+      </div>
+    }
+  </aside>
+
+  <section class="chat-col">
+    <div class="messages-scroll" #chatScroll>
+      <div class="messages-inner">
+        <div class="chat-header">
+          <p class="chat-kicker">Conversation</p>
+          <h3 class="welcome-headline">{{ currentConversationTitle() }}</h3>
+          <p class="chat-subheadline">
+            Ask grounded questions over your selected documents and reopen any saved chat from the history rail.
+          </p>
+        </div>
+
+        @if (isLoadingConversation()) {
+          <div class="empty-chat empty-chat--loading">
+            <div class="thinking-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p>Loading conversation...</p>
+          </div>
+        }
+
+        @if (!isLoadingConversation() && !messages().length) {
+          <div class="empty-chat">
+            <i class="pi pi-sparkles empty-chat__icon"></i>
+            <p class="empty-chat__title">Start a new document conversation</p>
+            <p class="empty-chat__copy">
+              Select one or more documents from the right panel, then ask your first question.
+            </p>
+          </div>
+        }
+
+        @for (msg of messages(); track msg.id) {
+          @if (msg.role === 'user') {
+            <div class="user-row">
+              <div class="user-bubble">
+                <p class="msg-text">{{ msg.text }}</p>
+                <span class="msg-time">
+                  {{ msg.timestamp | date:'shortTime' }}
+                </span>
+              </div>
+            </div>
+          }
+
+          @if (msg.role === 'ai') {
+            <div class="ai-row">
+              <div class="ai-avatar">
+                <i class="pi pi-sparkles"></i>
+              </div>
+              <div
+                class="ai-bubble"
+                [class.ai-bubble--error]="msg.isError"
+                [class.ai-bubble--streaming]="msg.isStreaming">
+                @if (msg.verified) {
+                  <span class="verified-badge">
+                    <i class="pi pi-verified"></i>
+                    Source Verified
+                  </span>
+                }
+
+                @if (msg.text) {
+                  <p class="msg-text" [innerHTML]="renderBold(msg.text)"></p>
+                } @else if (msg.isStreaming) {
+                  <div class="streaming-state">
+                    <span class="streaming-label">Generating answer</span>
+                    <span class="streaming-cursor" aria-hidden="true"></span>
+                  </div>
+                }
+
+                @if (msg.isStreaming && msg.text) {
+                  <div class="streaming-state streaming-state--inline">
+                    <span class="streaming-label">Streaming response</span>
+                    <span class="streaming-cursor" aria-hidden="true"></span>
+                  </div>
+                }
+
+                @if (msg.sourceDocuments?.length) {
+                  <span class="response-sources">
+                    Sources: {{ msg.sourceDocuments?.join(', ') }}
+                  </span>
+                }
+
+                @if (msg.hasSourceLink) {
+                  <button
+                    class="source-link-btn"
+                    type="button"
+                    (click)="viewSourceDoc($event, msg.sourceDocuments)">
+                    <i class="pi pi-file-pdf"></i>
+                    View Message Sources
+                  </button>
+                }
+
+                <span class="msg-time">
+                  {{ msg.timestamp | date:'shortTime' }}
+                </span>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-bar">
+        <button
+          class="attach-btn"
+          type="button"
+          pTooltip="Attach file"
+          tooltipPosition="top"
+          aria-label="Attach file">
+          <i class="pi pi-plus"></i>
+        </button>
+
+        <input
+          type="text"
+          class="chat-input"
+          placeholder="Ask a question about the selected documents..."
+          [value]="inputText()"
+          (input)="inputText.set($any($event.target).value)"
+          (keydown)="onEnterKey($event)"
+          [disabled]="isThinking() || isLoadingSources() || isLoadingConversation()"
+          aria-label="Chat input" />
+
+        <p-button
+          label="Send"
+          icon="pi pi-send"
+          iconPos="right"
+          styleClass="send-btn p-button-rounded"
+          [disabled]="!canSendMessage()"
+          [loading]="isThinking()"
+          (onClick)="sendMessage()">
+        </p-button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="sources-panel">
+    <div class="panel-section">
+      <h4 class="panel-heading panel-heading--accent">
+        Curated Sources
+        <span class="source-count">{{ selectedSourceCount() }}/{{ sources().length }}</span>
+      </h4>
+      <p class="panel-helper">Choose one or more documents to include with the chat request.</p>
+
+      @if (!isLoadingSources() && !sourceLoadError() && sources().length > 0 && selectedSourceCount() === 0) {
+        <p class="panel-helper panel-helper--warn">Select at least one document to enable chat.</p>
+      }
+
+      @if (isLoadingSources()) {
+        <div class="source-state">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>Loading documents...</span>
+        </div>
+      }
+
+      @if (!isLoadingSources() && sourceLoadError()) {
+        <div class="source-state source-state--error">
+          <i class="pi pi-exclamation-circle"></i>
+          <span>{{ sourceLoadError() }}</span>
+        </div>
+      }
+
+      @if (!isLoadingSources() && !sourceLoadError() && sources().length === 0) {
+        <div class="source-state">
+          <i class="pi pi-inbox"></i>
+          <span>No documents available yet.</span>
+        </div>
+      }
+
+      @if (!isLoadingSources() && sources().length > 0) {
+        <div class="source-list">
+          @for (doc of sources(); track doc.id) {
+            <label
+              class="source-card"
+              [class.source-card--active]="doc.selected">
+              <input
+                type="checkbox"
+                class="source-checkbox"
+                [checked]="doc.selected"
+                [attr.aria-label]="'Select ' + doc.name"
+                (change)="toggleSourceSelection(doc.id, $any($event.target).checked)" />
+
+              <i [class]="doc.icon + ' source-icon'"></i>
+
+              <div class="source-info">
+                <p class="source-name">{{ doc.name }}</p>
+                <p class="source-ref">{{ doc.reference }}</p>
+              </div>
+
+              <span [class]="'relevance-pill ' + getRelevanceColor(doc.relevance)">
+                {{ doc.relevance }}% match
+              </span>
+            </label>
+          }
+        </div>
+      }
+    </div>
+
+    <p-divider styleClass="panel-divider" />
+
+    <div class="panel-section">
+      <h4 class="panel-heading">Knowledge Metadata</h4>
+
+      <div class="meta-card">
+        <div class="meta-row">
+          <span class="meta-label">Selected Docs</span>
+          <span class="meta-value">{{ selectedSourceCount() }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Saved Chats</span>
+          <span class="meta-value">{{ conversationCount() }}</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">Chat Endpoint</span>
+          <span class="meta-value">/api/chat/ask/stream/</span>
+        </div>
+
+        <div class="meta-tags">
+          @for (tag of metaTags; track tag.label) {
+            <span class="meta-tag">{{ tag.label }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <button
+        class="quick-btn"
+        type="button"
+        (click)="copyAllMessages()"
+        pTooltip="Copy entire conversation"
+        tooltipPosition="top">
+        <i class="pi pi-copy quick-icon"></i>
+        <span>Copy All</span>
+      </button>
+
+      <button
+        class="quick-btn"
+        type="button"
+        (click)="exportConversation()"
+        pTooltip="Export as .txt file"
+        tooltipPosition="top">
+        <i class="pi pi-share-alt quick-icon"></i>
+        <span>Export</span>
+      </button>
+    </div>
+  </aside>
+</div>

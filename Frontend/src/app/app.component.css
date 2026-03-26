@@ -1,0 +1,27 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  width: 85%;
+  margin-left: 15%;
+  min-height: 100vh;
+  background-color: var(--surface-ground);
+  overflow-y: auto;
+}
+
+.placeholder-page {
+  padding: 3rem;
+}
+
+.placeholder-page h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.placeholder-page p {
+  color: var(--text-color-secondary);
+}

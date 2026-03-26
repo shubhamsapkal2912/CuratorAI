@@ -1,0 +1,377 @@
+/* ── Page Layout ── */
+.upload-page {
+  margin-left: 15%;
+  min-height: 100vh;
+  padding: 2.5rem 3rem;
+  max-width: calc(100% - 15%);
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+}
+
+.page-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-color);
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  color: var(--text-color-secondary);
+}
+
+/* ── Bento Grid ── */
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ── Drop Zone ── */
+.drop-zone {
+  border: 2px dashed var(--surface-border);
+  border-radius: 1rem;
+  background-color: var(--surface-card);
+  padding: 0.5rem;
+  transition: border-color 0.25s ease, background 0.25s ease;
+  cursor: pointer;
+}
+
+.drop-zone:hover,
+.drop-zone--active {
+  border-color: var(--primary-color);
+  background-color: color-mix(in srgb, var(--primary-color) 5%, white);
+}
+
+.drop-zone-inner {
+  background-color: var(--surface-ground);
+  border-radius: 0.75rem;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  transition: background 0.25s ease;
+}
+
+.drop-zone--active .drop-zone-inner {
+  background-color: color-mix(in srgb, var(--primary-color) 8%, white);
+}
+
+/* ── Upload Icon ── */
+.upload-icon-ring {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--primary-color) 10%, white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.drop-zone:hover .upload-icon-ring {
+  transform: scale(1.1);
+}
+
+.upload-cloud-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+.drop-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+}
+
+.drop-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* ── Select Button Override ── */
+::ng-deep .select-btn.p-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-400));
+  border: none;
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 14px rgba(0, 89, 186, 0.3);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+::ng-deep .select-btn.p-button:hover {
+  box-shadow: 0 6px 20px rgba(0, 89, 186, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Tips Grid ── */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.tip-card {
+  background-color: var(--surface-ground);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.tip-icon {
+  font-size: 1.4rem;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.tip-icon--primary {
+  color: var(--primary-color);
+}
+
+.tip-icon--tertiary {
+  color: #9e3d00;
+}
+
+.tip-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.35rem;
+}
+
+.tip-desc {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+}
+
+/* ── Queue Card ── */
+.queue-card {
+  background-color: var(--surface-ground);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 480px;
+}
+
+.queue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.queue-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.queue-badge {
+  background-color: #d8e2ff;
+  color: #001a41;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.375rem;
+}
+
+/* ── Queue List ── */
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+/* ── Queue Item ── */
+.queue-item {
+  background-color: var(--surface-card);
+  border-radius: 0.75rem;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.queue-item--uploading {
+  border-left-color: var(--primary-color);
+}
+
+.queue-item--complete {
+  border-left-color: #22c55e;
+}
+
+.queue-item--error {
+  border-left-color: #ef4444;
+}
+
+/* ── File Row ── */
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.file-icon-wrap {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.5rem;
+  background-color: color-mix(in srgb, var(--primary-color) 12%, white);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.file-icon-wrap--complete {
+  background-color: #f0fdf4;
+  color: #16a34a;
+}
+
+.file-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-status {
+  font-size: 0.72rem;
+  margin-top: 0.15rem;
+}
+
+.file-status--uploading {
+  color: var(--text-color-secondary);
+}
+
+.file-status--queued {
+  color: var(--text-color-secondary);
+}
+
+.file-status--complete {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.file-status--error {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+/* ── Action Icons ── */
+.complete-check {
+  color: #16a34a;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.uploading-spinner {
+  color: var(--primary-color);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color-secondary);
+  padding: 0.2rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.remove-btn:hover {
+  color: var(--red-500);
+}
+
+/* ── Progress Bar ── */
+.progress-row {
+  margin-top: 0.6rem;
+}
+
+::ng-deep .slim-progress .p-progressbar {
+  height: 6px;
+  border-radius: 99px;
+  background-color: var(--surface-border);
+}
+
+::ng-deep .slim-progress .p-progressbar-value {
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-400));
+}
+
+/* ── Empty State ── */
+.empty-queue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: var(--text-color-secondary);
+  gap: 0.5rem;
+}
+
+.empty-icon {
+  font-size: 2rem;
+  opacity: 0.4;
+}
+
+/* ── Queue Footer ── */
+.queue-footer {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+::ng-deep .finish-btn.p-button {
+  width: 100%;
+  justify-content: center;
+  padding: 0.9rem 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 0.75rem;
+}
+
+.powered-by {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+  margin-top: 1rem;
+  opacity: 0.7;
+}

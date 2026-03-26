@@ -1,0 +1,277 @@
+<p-toast position="top-right" />
+<p-confirmDialog styleClass="confirm-dialog" />
+
+<app-sidebar
+  [activeMenu]="activeMenu"
+  (menuSelect)="onMenuSelect($event)">
+</app-sidebar>
+
+<app-top-bar
+  pageTitle="Document Library"
+  [showSearch]="true"
+  (searchChange)="onSearch($event)">
+</app-top-bar>
+
+<div class="doc-page">
+  <div class="controls-row">
+    <div class="page-stats">
+      <h3 class="stats-title">Knowledge Base</h3>
+      <p class="stats-sub">
+        Managing {{ totalVectors() | number }} semantic vectors across {{ documentCount() }} documents.
+      </p>
+    </div>
+
+    <div class="controls-right">
+      <div class="view-toggle">
+        <button
+          class="toggle-btn"
+          [class.toggle-btn--active]="viewMode() === 'grid'"
+          (click)="setViewMode('grid')"
+          pTooltip="Grid view"
+          tooltipPosition="top">
+          <i class="pi pi-th-large"></i>
+          Grid
+        </button>
+        <button
+          class="toggle-btn"
+          [class.toggle-btn--active]="viewMode() === 'list'"
+          (click)="setViewMode('list')"
+          pTooltip="List view"
+          tooltipPosition="top">
+          <i class="pi pi-list"></i>
+          List
+        </button>
+      </div>
+
+      <p-button
+        label="Upload New"
+        icon="pi pi-plus"
+        styleClass="p-button-rounded upload-new-btn"
+        routerLink="/upload">
+      </p-button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="empty-search">
+      <i class="pi pi-spin pi-spinner empty-search-icon"></i>
+      <h4>Loading documents</h4>
+      <p>Fetching the latest document list from the server.</p>
+    </div>
+  }
+
+  @if (!isLoading() && filteredDocs().length === 0) {
+    <div class="empty-search">
+      <i class="pi pi-search empty-search-icon"></i>
+      <h4>No documents found</h4>
+      <p>Try a different search term or upload a new document.</p>
+    </div>
+  }
+
+  @if (!isLoading() && filteredDocs().length > 0 && viewMode() === 'grid') {
+    <div class="doc-grid">
+      @if (featuredDoc(); as doc) {
+        <div class="doc-card doc-card--featured">
+          <div class="featured-header">
+            <div class="featured-file-info">
+              <div class="file-icon file-icon--featured">
+                <i [class]="getDocIcon(doc.type)"></i>
+              </div>
+              <div>
+                <h4 class="featured-name">{{ doc.name }}</h4>
+                <div class="featured-meta">
+                  <p-tag
+                    [severity]="getStatusSeverity(doc.status)"
+                    [value]="getStatusLabel(doc.status)"
+                    styleClass="status-tag">
+                  </p-tag>
+                  <span class="meta-date">{{ doc.uploadedAt }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="featured-actions">
+              <button class="action-icon-btn" pTooltip="View document" tooltipPosition="top">
+                <i class="pi pi-eye"></i>
+              </button>
+              <button
+                class="action-icon-btn"
+                pTooltip="Re-index"
+                tooltipPosition="top"
+                (click)="reindexDoc(doc, $event)">
+                <i class="pi pi-refresh"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="meta-chips">
+            <div class="meta-chip">
+              <span class="chip-label">File Size</span>
+              <span class="chip-value">{{ doc.size }}</span>
+            </div>
+            <div class="meta-chip">
+              <span class="chip-label">Total Chunks</span>
+              <span class="chip-value">{{ doc.chunks ?? '-' }}</span>
+            </div>
+            <div class="meta-chip">
+              <span class="chip-label">Embeddings</span>
+              <span class="chip-value">{{ doc.embeddings ?? '-' }}</span>
+            </div>
+          </div>
+
+          <div class="featured-footer">
+            <div class="collaborators">
+              @for (i of [1, 2, 3]; track i) {
+                <div class="collab-avatar"></div>
+              }
+              @if ((doc.collaborators ?? 0) > 3) {
+                <div class="collab-more">+{{ (doc.collaborators ?? 0) - 3 }}</div>
+              }
+            </div>
+            <button
+              class="delete-btn"
+              (click)="confirmDelete(doc, $event)">
+              <i class="pi pi-trash"></i>
+              Remove Document
+            </button>
+          </div>
+        </div>
+      }
+
+      @for (doc of regularDocs(); track doc.id) {
+        @if (doc.status === 'processing') {
+          <div class="doc-card doc-card--processing">
+            <div class="card-top">
+              <div class="file-icon file-icon--processing">
+                <i [class]="getDocIcon(doc.type) + ' spin-icon'"></i>
+              </div>
+              <p-tag
+                value="Processing"
+                severity="info"
+                styleClass="status-tag">
+              </p-tag>
+            </div>
+            <h4 class="card-name">{{ doc.name }}</h4>
+            <p class="card-meta">{{ doc.uploadedAt }} • {{ doc.size }}</p>
+            <p-progressBar
+              [value]="doc.progress ?? 0"
+              [showValue]="false"
+              styleClass="doc-progress">
+            </p-progressBar>
+            <div class="card-footer">
+              <span class="processing-label">Chunking in progress...</span>
+              <button
+                class="action-icon-btn"
+                pTooltip="Cancel"
+                tooltipPosition="top"
+                (click)="cancelProcessing(doc, $event)">
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (doc.status !== 'processing') {
+          <div class="doc-card doc-card--standard">
+            <div class="card-top">
+              <div class="file-icon">
+                <i [class]="getDocIcon(doc.type)"></i>
+              </div>
+              <p-tag
+                [severity]="getStatusSeverity(doc.status)"
+                [value]="getStatusLabel(doc.status)"
+                styleClass="status-tag">
+              </p-tag>
+            </div>
+            <h4 class="card-name">{{ doc.name }}</h4>
+            <p class="card-meta">{{ doc.uploadedAt }} • {{ doc.size }}</p>
+            <div class="card-footer">
+              <button class="view-source-btn">View Source</button>
+              <div class="card-actions">
+                <button
+                  class="action-icon-btn"
+                  pTooltip="Re-index"
+                  tooltipPosition="top"
+                  (click)="reindexDoc(doc, $event)">
+                  <i class="pi pi-refresh"></i>
+                </button>
+                <button
+                  class="action-icon-btn action-icon-btn--danger"
+                  pTooltip="Delete"
+                  tooltipPosition="top"
+                  (click)="confirmDelete(doc, $event)">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <div
+        class="doc-card doc-card--add"
+        routerLink="/upload"
+        role="button"
+        tabindex="0">
+        <div class="add-icon-ring">
+          <i class="pi pi-plus"></i>
+        </div>
+        <p class="add-title">Upload New Document</p>
+        <p class="add-sub">Drag and drop PDF files here</p>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading() && filteredDocs().length > 0 && viewMode() === 'list') {
+    <div class="doc-list">
+      @for (doc of filteredDocs(); track doc.id) {
+        <div class="list-item">
+          <div class="list-file-icon">
+            <i [class]="getDocIcon(doc.type)"></i>
+          </div>
+          <div class="list-info">
+            <p class="list-name">{{ doc.name }}</p>
+            <p class="list-meta">{{ doc.uploadedAt }} • {{ doc.size }}</p>
+          </div>
+          <p-tag
+            [severity]="getStatusSeverity(doc.status)"
+            [value]="getStatusLabel(doc.status)"
+            styleClass="status-tag">
+          </p-tag>
+          @if (doc.status === 'processing') {
+            <p-progressBar
+              [value]="doc.progress ?? 0"
+              [showValue]="false"
+              styleClass="list-progress">
+            </p-progressBar>
+          }
+          <div class="list-actions">
+            <button class="action-icon-btn" (click)="reindexDoc(doc, $event)" pTooltip="Re-index">
+              <i class="pi pi-refresh"></i>
+            </button>
+            <button class="action-icon-btn action-icon-btn--danger" (click)="confirmDelete(doc, $event)" pTooltip="Delete">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="load-more-row">
+    <p-button
+      label="Load More Documents"
+      icon="pi pi-chevron-down"
+      iconPos="right"
+      styleClass="p-button-text p-button-secondary load-more-btn"
+      [loading]="isLoadingMore()"
+      (onClick)="loadMore()">
+    </p-button>
+  </div>
+</div>
+
+@if (showFab()) {
+  <button class="fab" (click)="openAssistant()" aria-label="Open AI Assistant">
+    <i class="pi pi-comments"></i>
+    <span class="fab-tooltip">Ask Assistant</span>
+  </button>
+}

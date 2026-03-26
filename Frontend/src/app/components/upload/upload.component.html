@@ -1,0 +1,181 @@
+<p-toast position="top-right" />
+
+<app-sidebar
+  [activeMenu]="activeMenu"
+  (menuSelect)="onMenuSelect($event)">
+</app-sidebar>
+
+<div class="upload-page">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <h2 class="page-title">Knowledge Ingestion</h2>
+    <p class="page-subtitle">Curate your private data lake for enhanced AI intelligence.</p>
+  </header>
+
+  <!-- Bento Grid -->
+  <div class="upload-grid">
+
+    <!-- ── Left Column: Drop Zone + Tips ── -->
+    <section class="drop-section">
+
+      <!-- Drop Zone Card -->
+      <div
+        class="drop-zone"
+        [class.drop-zone--active]="isDragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)">
+
+        <div class="drop-zone-inner">
+          <!-- Cloud Icon -->
+          <div class="upload-icon-ring">
+            <i class="pi pi-cloud-upload upload-cloud-icon"></i>
+          </div>
+
+          <h3 class="drop-title">Drop your PDF documents here</h3>
+          <p class="drop-subtitle">
+            Support for PDF uploads only.<br />
+            Individual files up to 50 MB.
+          </p>
+
+          <!-- Hidden file input -->
+          <input
+            id="hiddenFileInput"
+            type="file"
+            multiple
+            accept=".pdf"
+            class="hidden-input"
+            (change)="onFileSelect($event)" />
+
+          <p-button
+            label="Select Local Files"
+            icon="pi pi-plus"
+            styleClass="p-button-rounded select-btn"
+            (onClick)="triggerFileInput()">
+          </p-button>
+        </div>
+      </div>
+
+      <!-- Tips Grid -->
+      <div class="tips-grid">
+        <div class="tip-card">
+          <i class="pi pi-verified tip-icon tip-icon--tertiary"></i>
+          <h4 class="tip-title">OCR Support</h4>
+          <p class="tip-desc">
+            Handwritten notes and scanned PDFs are automatically
+            processed with high-precision OCR.
+          </p>
+        </div>
+        <div class="tip-card">
+          <i class="pi pi-lock tip-icon tip-icon--primary"></i>
+          <h4 class="tip-title">Encrypted Storage</h4>
+          <p class="tip-desc">
+            Files are chunked and encrypted at rest using
+            enterprise-grade AES-256 protocols.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Right Column: Upload Queue ── -->
+    <section class="queue-section">
+      <div class="queue-card">
+
+        <!-- Queue Header -->
+        <div class="queue-header">
+          <h3 class="queue-title">Upload Queue</h3>
+          <span class="queue-badge">{{ queueCount }} Files</span>
+        </div>
+
+        <!-- Queue List -->
+        <div class="queue-list">
+          @for (file of uploadQueue(); track file.id; let i = $index) {
+            <div
+              class="queue-item"
+              [class.queue-item--complete]="file.status === 'complete'"
+              [class.queue-item--uploading]="file.status === 'uploading'"
+              [class.queue-item--error]="file.status === 'error'">
+
+              <!-- File Info Row -->
+              <div class="file-row">
+                <div class="file-icon-wrap"
+                     [class.file-icon-wrap--complete]="file.status === 'complete'">
+                  <i [class]="file.icon"></i>
+                </div>
+
+                <div class="file-meta">
+                  <p class="file-name" [title]="file.name">{{ file.name }}</p>
+                  @if (file.status === 'complete') {
+                    <p class="file-status file-status--complete">
+                      Ready for indexing
+                    </p>
+                  } @else if (file.status === 'error') {
+                    <p class="file-status file-status--error">
+                      {{ file.errorMessage || 'Upload failed. Please try again.' }}
+                    </p>
+                  } @else if (file.status === 'queued') {
+                    <p class="file-status file-status--queued">
+                      {{ file.size }} &bull; Ready to upload
+                    </p>
+                  } @else {
+                    <p class="file-status file-status--uploading">
+                      {{ file.size }} &bull; {{ file.progress }}%
+                    </p>
+                  }
+                </div>
+
+                <!-- Action Icon -->
+                @if (file.status === 'complete') {
+                  <i class="pi pi-check-circle complete-check"></i>
+                } @else if (file.status === 'uploading') {
+                  <i class="pi pi-spin pi-spinner uploading-spinner"></i>
+                } @else {
+                  <button class="remove-btn" (click)="removeFile(i)" aria-label="Remove file">
+                    <i class="pi pi-times"></i>
+                  </button>
+                }
+              </div>
+
+              <!-- Progress Bar -->
+              @if (file.status === 'uploading') {
+                <div class="progress-row">
+                  <p-progressBar
+                    [value]="file.progress"
+                    [showValue]="false"
+                    styleClass="slim-progress">
+                  </p-progressBar>
+                </div>
+              }
+
+            </div>
+          }
+
+          @if (uploadQueue().length === 0) {
+            <div class="empty-queue">
+              <i class="pi pi-inbox empty-icon"></i>
+              <p>No files in queue</p>
+            </div>
+          }
+        </div>
+
+        <!-- Footer Action -->
+        <div class="queue-footer">
+          <p-button
+            label="Upload PDFs"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            styleClass="p-button-primary finish-btn"
+            [disabled]="!hasPendingUploads"
+            [loading]="isUploading()"
+            (onClick)="finishUpload()">
+          </p-button>
+          <p class="powered-by">Powered by VectorCore RAG</p>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>

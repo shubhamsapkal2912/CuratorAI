@@ -1,0 +1,42 @@
+<aside class="sidebar">
+
+  <!-- Brand -->
+  <div class="sidebar-brand">
+    <h1 class="brand-title">Curator AI</h1>
+    <p class="brand-sub">Enterprise RAG</p>
+  </div>
+
+  <!-- Main Navigation -->
+  <nav class="sidebar-nav" role="navigation">
+    @for (item of mainNavItems; track item.id) {
+      <a
+        class="nav-item"
+        [class.nav-item--active]="activeMenu === item.id"
+        (click)="select(item.id)"
+        pRipple
+        role="button"
+        [attr.aria-label]="item.label"
+        [attr.aria-current]="activeMenu === item.id ? 'page' : null">
+        <i [class]="item.icon + ' nav-icon'"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <!-- Bottom Navigation -->
+  <div class="sidebar-bottom">
+    @for (item of bottomNavItems; track item.id) {
+      <a
+        class="nav-item"
+        [class.nav-item--active]="activeMenu === item.id"
+        (click)="select(item.id)"
+        pRipple
+        role="button"
+        [attr.aria-label]="item.label">
+        <i [class]="item.icon + ' nav-icon'"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </div>
+
+</aside>

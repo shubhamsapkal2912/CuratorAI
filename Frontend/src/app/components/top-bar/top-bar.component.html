@@ -1,0 +1,46 @@
+<header class="topbar">
+
+  <!-- Left: Title + Search -->
+  <div class="topbar-left">
+    <h2 class="topbar-title">{{ pageTitle }}</h2>
+
+    @if (showSearch) {
+      <div class="search-box">
+        <i class="pi pi-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by filename or content..."
+          [value]="searchQuery()"
+          (input)="onSearchInput($any($event.target).value)"
+          aria-label="Search documents" />
+      </div>
+    }
+  </div>
+
+  <!-- Right: Actions + Avatar -->
+  <div class="topbar-right">
+    <button
+      class="icon-action-btn"
+      (click)="goToNotifications()"
+      aria-label="Notifications"
+      [class.has-dot]="hasNotifications()">
+      <i class="pi pi-bell"></i>
+      @if (hasNotifications()) {
+        <span class="notif-dot"></span>
+      }
+    </button>
+
+    <button
+      class="icon-action-btn"
+      (click)="goToSettings()"
+      aria-label="Settings">
+      <i class="pi pi-cog"></i>
+    </button>
+
+    <div class="user-avatar" [title]="authService.getUser()?.name ?? 'User'">
+      <span class="avatar-initials">{{ getUserInitials() }}</span>
+    </div>
+  </div>
+
+</header>
